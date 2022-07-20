@@ -1,26 +1,23 @@
 //IMPORTS
 const express = require("express");
+const cookieParser = require("cookie-parser");
+require("dotenv").config();
 const dbConnection = require("./src/configs/db");
 const movieRoutes = require("./src/routes/movieRoutes");
-require("dotenv").config();
-
 
 //APP INITIALIZATION
 const app = express();
 
-
 //MIDDLEWARES
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cookieParser()); // FOR PARSING COOKIES SENT VIA REQUEST
 
 //ROUTES
 app.use("/movies", movieRoutes);
 
-
 //DBCONNECTION
 dbConnection();
-
 
 app.listen(process.env.PORT, () =>
   console.log(`Listening at PORT ${process.env.PORT}`)

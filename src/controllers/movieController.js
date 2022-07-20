@@ -25,7 +25,20 @@ const createMovie = async (req, res) => {
 };
 
 //METHOD -> GET
-//PATH -> movies/get-accessToken
+//PATH -> movies/getAllMovies
+//ACCESS -> PUBLIC
+const getAllMovies = async (_, res) => {
+  try {
+    const movie = await Movie.find({});
+    res.status(200).send(movie);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error.message);
+  }
+};
+
+//METHOD -> GET
+//PATH -> movies/accessToken
 //ACCESS -> PUBLIC
 // WILL GENERATE A ACCESS TOKEN  WHICH IS USED TO ACCESS PRIVATE ENDPOINTS
 const getJwtToken = (_, res) => {
@@ -44,6 +57,7 @@ const getJwtToken = (_, res) => {
 //PATH -> movies/delete
 //ACCESS -> PRIVATE
 //DELETE USING MOVIE NAME
+//GET ACCESSTOKEN USING /movies/accessToken ENDPOINT
 const deleteMovie = async (req, res) => {
   const { movieName } = req.query;
   try {
@@ -64,6 +78,7 @@ const deleteMovie = async (req, res) => {
 //PATH -> movies/update
 //ACCESS -> PRIVATE
 //UPDATE USING MOVIE NAME
+//GET ACCESSTOKEN USING /movies/accessToken ENDPOINT
 const updateMovie = async (req, res) => {
   const { movieName, rating, cast, genre, releaseDate, filter } = req.body;
   const options = { movieName, rating, cast, genre, releaseDate };
@@ -75,19 +90,6 @@ const updateMovie = async (req, res) => {
     }
     await Movie.updateOne({ movieName: filter }, options);
     res.status(200).send("updated SuccessFully");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send(error.message);
-  }
-};
-
-//METHOD -> GET
-//PATH -> movies/getAllMovies
-//ACCESS -> PUBLIC
-const getAllMovies = async (_, res) => {
-  try {
-    const movie = await Movie.find({});
-    res.status(200).send(movie);
   } catch (error) {
     console.error(error);
     res.status(500).send(error.message);
