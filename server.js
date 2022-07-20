@@ -1,6 +1,27 @@
+//IMPORTS
 const express = require("express");
+const dbConnection = require("./src/configs/db");
+const movieRoutes = require("./src/routes/movieRoutes");
+require("dotenv").config();
+
+
+//APP INITIALIZATION
 const app = express();
 
-app.use(express.json());
 
-app.listen(3000, () => console.log("Listening at PORT 3000"));
+//MIDDLEWARES
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+//ROUTES
+app.use("/movies", movieRoutes);
+
+
+//DBCONNECTION
+dbConnection();
+
+
+app.listen(process.env.PORT, () =>
+  console.log(`Listening at PORT ${process.env.PORT}`)
+);
